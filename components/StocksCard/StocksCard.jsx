@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -88,7 +89,7 @@ export default function TotalStocksCard() {
     try {
       // console.log(payload)
       const response = await axios.post(
-        "http://127.0.0.1:5001/production/stocks/update",
+        `${API_BASE_URL}/production/stocks/update`,
         payload,
         {
           headers: {

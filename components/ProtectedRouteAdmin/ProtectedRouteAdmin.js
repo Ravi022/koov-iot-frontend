@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation"; // Import from next/navigation
@@ -12,7 +13,7 @@ const isAuthenticated = async () => {
   }
 
   try {
-    const response = await axios.post("http://127.0.0.1:5001/common/token", {
+    const response = await axios.post(`${API_BASE_URL}/common/token`, {
       refreshToken,
     });
 
@@ -79,7 +80,7 @@ const ProtectedRouteAdmin = ({ children }) => {
 
         try {
           const response = await axios.post(
-            "http://127.0.0.1:5001/common/token",
+            `${API_BASE_URL}/common/token`,
             {
               refreshToken,
             }

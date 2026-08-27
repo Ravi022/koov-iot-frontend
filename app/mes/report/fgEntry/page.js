@@ -1,4 +1,5 @@
 'use client';
+import { API_BASE_URL } from "@/lib/api";
 import { materialCodeOptions } from '@/app/constant';
 import FilterBar from '@/components/Mes/components/Packing/FilterBar';
 import axios from 'axios';
@@ -34,7 +35,7 @@ const PackingTable = () => {
         const fetchPackingData = async () => {
             try {
                 setIsLoading(true);
-                const res = await axios.get("http://127.0.0.1:5001/admin/report/fetchPackingMesData");
+                const res = await axios.get(`${API_BASE_URL}/admin/report/fetchPackingMesData`);
                 if (res.data.success) {
                     setData(res.data.data);
                     setFilteredData(res.data.data);

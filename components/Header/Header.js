@@ -1,5 +1,6 @@
-
 "use client";
+import { API_BASE_URL } from "@/lib/api";
+
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Image from "next/image";
@@ -136,7 +137,7 @@ export default function Header() {
   const handleOnClickLogout = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await axios.get("http://127.0.0.1:5001/common/logoutUser", {
+      const response = await axios.get(`${API_BASE_URL}/common/logoutUser`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       if (response.status === 200) {

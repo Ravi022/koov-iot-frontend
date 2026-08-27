@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import React, { useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
@@ -26,7 +27,7 @@ function Page() {
         if (userDetails?.role === 'admin')
             setEditSvg(true);
         try {
-            const res = await axios.get('http://127.0.0.1:5001/common/getIssue',
+            const res = await axios.get(`${API_BASE_URL}/common/getIssue`,
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`, // Send the token in the Authorization header

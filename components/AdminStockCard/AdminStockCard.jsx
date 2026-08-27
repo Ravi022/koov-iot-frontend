@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -171,7 +172,7 @@ const StockCard = ({ selectedDateByMain }) => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5001/admin/stocks/retrieve",
+        `${API_BASE_URL}/admin/stocks/retrieve`,
         payload,
         {
           headers: {

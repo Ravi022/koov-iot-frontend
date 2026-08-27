@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/lib/api";
 import { useMemo, useState } from "react"
 import { Loader2, Trash2, Pencil } from "lucide-react"
 import InputField from "../input-field"
@@ -117,7 +118,7 @@ export default function RejectionForm() {
         const toastId = toast.loading("Submitting packing data...");
 
         try {
-            const response = await axios.post("http://127.0.0.1:5001/packing/wipRejection/update", {
+            const response = await axios.post(`${API_BASE_URL}/packing/wipRejection/update`, {
                 year,
                 month,
                 day,

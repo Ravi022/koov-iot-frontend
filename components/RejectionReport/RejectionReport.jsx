@@ -1,4 +1,5 @@
 'use client'
+import { API_BASE_URL } from "@/lib/api";
 
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
@@ -143,7 +144,7 @@ const RejectionReport = ({ selectedDateByMain }) => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5001/admin/rejectionReport",
+        `${API_BASE_URL}/admin/rejectionReport`,
         date ? { payload } : {},
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );

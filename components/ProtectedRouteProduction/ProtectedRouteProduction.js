@@ -1,6 +1,10 @@
-// "use client";
+"use client";
 
-// import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import axios from "axios";
+import { API_BASE_URL } from "@/lib/api";
+// // import { useState, useEffect } from "react";
 // import { useRouter } from "next/navigation"; // Import from next/navigation
 // import axios from "axios";
 
@@ -12,7 +16,7 @@
 //   }
 
 //   try {
-//     const response = await axios.post("http://127.0.0.1:5001/common/token", {
+//     const response = await axios.post(`${API_BASE_URL}/common/token`, {
 //       refreshToken,
 //     });
 
@@ -65,7 +69,7 @@
 
 //         try {
 //           const response = await axios.post(
-//             "http://127.0.0.1:5001/common/token",
+//             `${API_BASE_URL}/common/token`,
 //             {
 //               refreshToken,
 //             }
@@ -107,12 +111,6 @@
 // export default ProtectedRouteAdmin;
 
 
-"use client";
-
-import { useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation"; // Import from next/navigation
-import axios from "axios";
-
 const isAuthenticated = async () => {
   const refreshToken = localStorage.getItem("refreshToken");
   if (!refreshToken) {
@@ -121,7 +119,7 @@ const isAuthenticated = async () => {
   }
 
   try {
-    const response = await axios.post("http://127.0.0.1:5001/common/token", {
+    const response = await axios.post(`${API_BASE_URL}/common/token`, {
       refreshToken,
     });
 
@@ -185,7 +183,7 @@ const ProtectedRouteProduction = ({ children }) => {
 
         try {
           const response = await axios.post(
-            "http://127.0.0.1:5001/common/token",
+            `${API_BASE_URL}/common/token`,
             {
               refreshToken,
             }

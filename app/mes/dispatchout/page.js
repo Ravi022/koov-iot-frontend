@@ -1,5 +1,6 @@
-
 "use client"
+
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react"
 import InputField from "@/components/Mes/components/input-field"
@@ -150,7 +151,7 @@ export default function DispatchPage() {
 
     const { year, month, day } = getNormalizedDate(date);
     try {
-      const response = await axios.post('http://127.0.0.1:5001/production/dispachOutMes/update', { year, month, day, items, totalPieces, mtdType: "totaldispatch", invoiceNo },
+      const response = await axios.post(`${API_BASE_URL}/production/dispachOutMes/update`, { year, month, day, items, totalPieces, mtdType: "totaldispatch", invoiceNo },
         {
           headers: {
             Authorization: `Bearer ${token}`,

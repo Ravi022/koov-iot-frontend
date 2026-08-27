@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import React, { useState, useEffect } from 'react';
 // import { Link } from 'react-router-dom';
@@ -32,7 +33,7 @@ const OrderDetails = () => {
         const fetchData = async () => {
             try {
                 const accessToken = localStorage.getItem("accessToken")
-                const res = await axios.get('http://127.0.0.1:5001/common/getAllOrder',
+                const res = await axios.get(`${API_BASE_URL}/common/getAllOrder`,
                     {
                         headers: {
                             Authorization: `Bearer ${accessToken}`, // Send the token in the Authorization header

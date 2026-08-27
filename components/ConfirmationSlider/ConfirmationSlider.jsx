@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import React, { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
@@ -44,7 +45,7 @@ export default function ConfirmationSlider({
     setIsLoading(true); // Start loading
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5001/admin/setTaskPermission",
+        `${API_BASE_URL}/admin/setTaskPermission`,
         { canAssignTasks }, // Payload to update permission
         {
           headers: {

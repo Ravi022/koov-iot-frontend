@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/lib/api";
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -112,8 +113,8 @@ export default function TargetHistory() {
     if (selectedPerson) {
       const url =
         selectedPerson.jobId === "totalMonthlyDetails"
-          ? "http://127.0.0.1:5001/admin/totalStatsOfSalesperson"
-          : "http://127.0.0.1:5001/admin/monthlyStats";
+          ? `${API_BASE_URL}/admin/totalStatsOfSalesperson`
+          : `${API_BASE_URL}/admin/monthlyStats`;
 
       try {
         const response = await axios.post(url, payload, {

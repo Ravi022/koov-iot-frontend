@@ -1,4 +1,5 @@
 'use client';
+import { API_BASE_URL } from "@/lib/api";
 import { materialCodeOptions } from '@/app/constant';
 import FilterBar from '@/components/Mes/components/Packing/FilterBar';
 import axios from 'axios';
@@ -27,7 +28,7 @@ const WipBgradeTable = () => {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
-                const res = await axios.get('http://127.0.0.1:5001/packing/wipBgradeEntry/fetch',
+                const res = await axios.get(`${API_BASE_URL}/packing/wipBgradeEntry/fetch`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`

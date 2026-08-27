@@ -1,4 +1,5 @@
 'use client';
+import { API_BASE_URL } from "@/lib/api";
 import React, { useEffect, useState, useMemo } from 'react';
 import Loading from '@/components/ui/Loading';
 import axios from 'axios';
@@ -27,7 +28,7 @@ const BreakdownReport = () => {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
-                const res = await axios.get('http://127.0.0.1:5001/admin/fetchProductionMesData', {
+                const res = await axios.get(`${API_BASE_URL}/admin/fetchProductionMesData`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 if (res.data.success) {

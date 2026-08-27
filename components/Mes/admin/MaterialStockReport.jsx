@@ -1,5 +1,6 @@
-
 'use client';
+
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -59,10 +60,10 @@ export default function MaterialStockReport() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:5001/admin/fetchBatchStockData');
+        const res = await fetch(`${API_BASE_URL}/admin/fetchBatchStockData`);
         const json = await res.json();
         const allMaterials = json.data.flatMap((batch) => batch.materials);
-        // console.log("allMaterial", allMaterials)
+        // console.log(`allMaterial", allMaterials)
         setData(allMaterials);
       } catch (err) {
         console.error("Failed to fetch stock data", err);

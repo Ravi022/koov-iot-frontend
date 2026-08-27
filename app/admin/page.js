@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Updated for the app directory
@@ -91,7 +92,7 @@ export default function AdminDashboard() {
       const accessToken = localStorage.getItem("accessToken");
       try {
         const response = await axios.post(
-          "http://127.0.0.1:5001/admin/files",
+          `${API_BASE_URL}/admin/files`,
           { fileType: category },
           { headers: { Authorization: `Bearer ${accessToken}` } }
         );
@@ -120,7 +121,7 @@ export default function AdminDashboard() {
 
       try {
         const response = await axios.post(
-          "http://127.0.0.1:5001/admin/files",
+          `${API_BASE_URL}/admin/files`,
           {
             fileType: "productionReport",
             month: selectedMonth,

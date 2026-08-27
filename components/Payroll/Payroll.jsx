@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -82,7 +83,7 @@ export default function Payroll() {
     try {
       // console.log(payload)
       const response = await axios.post(
-        "http://127.0.0.1:5001/production/manPowerCosting/update",
+        `${API_BASE_URL}/production/manPowerCosting/update`,
         payload,
         {
           headers: {

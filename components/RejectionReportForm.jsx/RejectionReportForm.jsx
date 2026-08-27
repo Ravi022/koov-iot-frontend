@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -74,7 +75,7 @@ export default function RejectionReportForm() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5001/production/rejectionReport/update",
+        `${API_BASE_URL}/production/rejectionReport/update`,
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },

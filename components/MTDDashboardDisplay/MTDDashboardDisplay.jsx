@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/lib/api";
 import React, { useState, useEffect, useRef, useActionState } from "react";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -151,7 +152,7 @@ const AdminMetricsDashboard = ({ selectedDateByMain }) => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5001/admin/mtd/values",
+        `${API_BASE_URL}/admin/mtd/values`,
         date ? payload : {},
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );

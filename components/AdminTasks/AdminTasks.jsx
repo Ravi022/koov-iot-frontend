@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import React, { useState } from "react";
 import axios from "axios";
@@ -155,7 +156,7 @@ export default function AdminTasks() {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://127.0.0.1:5001/admin/adminViewTasks",
+        `${API_BASE_URL}/admin/adminViewTasks`,
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },

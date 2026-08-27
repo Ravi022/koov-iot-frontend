@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/lib/api";
 import React, { useState, useEffect } from "react";
 import {
   Card,
@@ -63,7 +64,7 @@ export default function TargetInformation({
       };
 
       const response = await axios.post(
-        "http://127.0.0.1:5001/user/updateDailyTarget",
+        `${API_BASE_URL}/user/updateDailyTarget`,
         payload,
         config
       );

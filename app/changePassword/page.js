@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios"; // Make sure axios is installed in your project
@@ -50,7 +51,7 @@ export default function Page() {
       const accessToken = localStorage.getItem("accessToken"); // Retrieve the token from localStorage
 
       const response = await axios.post(
-        "http://127.0.0.1:5001/common/changePassword",
+        `${API_BASE_URL}/common/changePassword`,
         {
           oldPassword: oldPassword,
           newPassword: newPassword,

@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
@@ -57,7 +58,7 @@ export default function TargetAssignmentDashboard() {
     const token = localStorage.getItem("accessToken"); // Retrieve the Bearer token from local storage
     try {
       const response = await axios.get(
-        "http://127.0.0.1:5001/admin/canSalespersonAddTasks",
+        `${API_BASE_URL}/admin/canSalespersonAddTasks`,
         {
           headers: {
             Authorization: `Bearer ${token}`, // Add the Bearer token to the headers
@@ -97,7 +98,7 @@ export default function TargetAssignmentDashboard() {
     console.log("payload of monthlyTarget", payload);
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5001/admin/monthlyTarget",
+        `${API_BASE_URL}/admin/monthlyTarget`,
         payload,
         {
           headers: {
@@ -124,7 +125,7 @@ export default function TargetAssignmentDashboard() {
   // Trigger download via JavaScript (e.g., on button click)
   // function handleDownloadReport() {
   //   console.log("click")
-  //   fetch("http://127.0.0.1:5001/export-tasks", {
+  //   fetch(`${API_BASE_URL}/export-tasks`, {
   //     method: "GET",
   //   })
   //   .then(response => response.blob())  // Convert response to blob

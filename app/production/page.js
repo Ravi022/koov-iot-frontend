@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 import React, { useState } from "react";
 import axios from "axios";
 import { Upload, Trash2, ArrowRight } from "lucide-react";
@@ -86,7 +87,7 @@ const ProductionDashboard = () => {
       formData.append("fileType", xlsxFiles[index].name);
       formData.append("file", file);
 
-      await axios.post("http://127.0.0.1:5001/production/upload", formData, {
+      await axios.post(`${API_BASE_URL}/production/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${accessToken}`,
@@ -136,7 +137,7 @@ const ProductionDashboard = () => {
 
       formData.append("reportYear", selectedYear);
 
-      await axios.post("http://127.0.0.1:5001/production/upload", formData, {
+      await axios.post(`${API_BASE_URL}/production/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${accessToken}`,

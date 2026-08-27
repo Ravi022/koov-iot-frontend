@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import axios from "axios";
+import { API_BASE_URL } from "@/lib/api";
 // "use client"
 
 
@@ -49,9 +55,7 @@
 // export default ProtectedRouteAll;
 
 
-// "use client";
-
-// import { useEffect, useState } from "react";
+// // import { useEffect, useState } from "react";
 // import { usePathname, useRouter } from "next/navigation";
 
 // const ProtectedRouteAll = ({ children }) => {
@@ -158,14 +162,6 @@
 // export default ProtectedRouteAll;
 
 
-"use client";
-
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import axios from "axios";
-
-
-
 const ProtectedRouteAll = ({ children }) => {
 
     const isAuth = async () => {
@@ -176,7 +172,7 @@ const ProtectedRouteAll = ({ children }) => {
         }
 
         try {
-            const response = await axios.post("http://127.0.0.1:5001/common/token", {
+            const response = await axios.post(`${API_BASE_URL}/common/token`, {
                 refreshToken,
             });
 

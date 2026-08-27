@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/lib/api";
 import axios from "axios";
 import React, { useState } from "react";
 import { toast } from 'react-toastify';
@@ -26,8 +27,8 @@ const EditRemark = ({ data, setShowEditRemark, setSaveChange, showEditRemark }) 
     //       const updatedRemark = remark;
     //       console.log("OID", orderId);
     //       console.log("remark", updatedRemark);
-    //       const respose = await axios.put('http://127.0.0.1:5001/common/updateRemark', {orderId, updatedRemark})
-    //       console.log("res", respose);
+    //       const respose = await axios.put(`${API_BASE_URL}/common/updateRemark`, {orderId, updatedRemark})
+    //       console.log(`res", respose);
     //       if(respose.status === 200){
     //         toast.success("Remark is Updated");
     //         setShowEditRemark(false);
@@ -52,7 +53,7 @@ const EditRemark = ({ data, setShowEditRemark, setSaveChange, showEditRemark }) 
             // console.log("OID", orderId);
             // console.log("remark", updatedRemark);
 
-            const response = await axios.put('http://127.0.0.1:5001/common/updateRemark', { orderId, updatedRemark },
+            const response = await axios.put(`${API_BASE_URL}/common/updateRemark`, { orderId, updatedRemark },
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`, // Send the token in the Authorization header

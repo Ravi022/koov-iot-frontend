@@ -1,5 +1,5 @@
 "use client"
-
+import { API_BASE_URL } from "@/lib/api";
 import InputField from "@/components/Mes/components/input-field";
 import AddItemsButton from "@/components/Mes/components/add-items";
 import { useEffect, useState } from "react";
@@ -104,7 +104,7 @@ export default function ProductionPage() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:5001/production/productionMesData/update", {
+      const res = await fetch(`${API_BASE_URL}/production/productionMesData/update`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { CalendarIcon, MapPin, Target } from "lucide-react";
@@ -40,7 +41,7 @@ export default function SalesManagerDashboard() {
       const year = date.getFullYear();
 
       const response = await axios.post(
-        "http://127.0.0.1:5001/user/getMonthlyStatsAndDailyTasks",
+        `${API_BASE_URL}/user/getMonthlyStatsAndDailyTasks`,
         { day, month, year },
         config
       );

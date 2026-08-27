@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/lib/api";
 // "use client";
 
 // import axios from 'axios';
@@ -41,7 +42,7 @@
 
 //     // Send POST request to the backend
 //     try {
-//       const response = await axios.post('http://127.0.0.1:5001/user/register', {
+//       const response = await axios.post(`${API_BASE_URL}/user/register`, {
 //         // method: 'POST',
 //         // headers: {
 //         //   'Content-Type': 'application/json',
@@ -63,7 +64,7 @@
 //   };
 
 //   return (
-//     <div className="min-h-screen bg-gray-50 flex justify-center items-center py-8 px-4 sm:px-6 lg:px-8">
+//     <div className=`min-h-screen bg-gray-50 flex justify-center items-center py-8 px-4 sm:px-6 lg:px-8">
 //       <div className="w-full max-w-md bg-white p-8 border rounded-lg shadow-md">
 //         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Register</h2>
 

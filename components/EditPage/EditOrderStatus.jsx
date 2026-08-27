@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -35,7 +36,7 @@ const EditPage = ({ selectedOrder, setShowEdit, setSaveChange, showEdit }) => {
                 const Id = selectedOrder._id
                 // console.log(userId, Id)
                 const orderStatus = selectedProcess;
-                const res = await axios.put('http://127.0.0.1:5001/common/updateOrderStatus',
+                const res = await axios.put(`${API_BASE_URL}/common/updateOrderStatus`,
                     { Id, orderStatus }, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`, // Send the token in the Authorization header

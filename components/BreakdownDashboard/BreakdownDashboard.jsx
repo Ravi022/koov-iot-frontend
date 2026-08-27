@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
@@ -399,7 +400,7 @@ export default function BreakdownDashboard({ selectedDateByMain }) {
             try {
                 const accessToken = localStorage.getItem("accessToken");
                 const res = await axios.get(
-                    "http://127.0.0.1:5001/admin/productionMesData",
+                    `${API_BASE_URL}/admin/productionMesData`,
                     {
                         headers: { Authorization: `Bearer ${accessToken}` },
                         params: { year, month },
@@ -439,7 +440,7 @@ export default function BreakdownDashboard({ selectedDateByMain }) {
                 try {
                     const accessToken = localStorage.getItem("accessToken");
                     const res = await axios.get(
-                        "http://127.0.0.1:5001/admin/productionMesData",
+                        `${API_BASE_URL}/admin/productionMesData`,
                         {
                             headers: { Authorization: `Bearer ${accessToken}` },
                             params: { year, month },

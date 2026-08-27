@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/lib/api";
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -74,7 +75,7 @@ export default function TargetHistory() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5001/admin/barchart",
+        `${API_BASE_URL}/admin/barchart`,
         {
           month: month.toString(),
           year: year.toString(),

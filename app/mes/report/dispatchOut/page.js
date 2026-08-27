@@ -1,4 +1,5 @@
 'use client';
+import { API_BASE_URL } from "@/lib/api";
 import axios from 'axios';
 import React, { useEffect, useState, useMemo } from 'react';
 import FilterBar from '@/components/Mes/components/Packing/FilterBar';
@@ -28,7 +29,7 @@ const DispatchOutTable = () => {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
-                const res = await axios.get('http://127.0.0.1:5001/production/dispatchOut/fetch', {
+                const res = await axios.get(`${API_BASE_URL}/production/dispatchOut/fetch`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 if (res.data.success) {

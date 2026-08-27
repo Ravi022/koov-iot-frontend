@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/lib/api";
 import React, { useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
@@ -55,7 +56,7 @@ const ProductionInput = () => {
         const day = selectedDate.getDate().toString().padStart(2, "0");
 
         const response = await axios.post(
-          "http://127.0.0.1:5001/production/mtd/update",
+          `${API_BASE_URL}/production/mtd/update`,
           {
             year,
             month,

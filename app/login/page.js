@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +31,7 @@ export default function LoginPage() {
     setError(null); // Clear any previous errors
 
     try {
-      const response = await axios.post("http://127.0.0.1:5001/auth/login", {
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
         jobId, // Send jobId instead of username
         password,
       });

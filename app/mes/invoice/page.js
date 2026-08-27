@@ -1,5 +1,6 @@
-
 "use client"
+import { API_BASE_URL } from "@/lib/api";
+
 import { useMemo, useState } from "react"
 import InputField from "@/components/Mes/components/input-field"
 import AddItemsButton from "@/components/Mes/components/add-items"
@@ -64,7 +65,7 @@ export default function InvoicePage() {
     //  console.log(token)
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5001/production/invoiceMesData/update",
+        `${API_BASE_URL}/production/invoiceMesData/update`,
         { year, month, day, invoiceNo, items, totalPieces },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -102,7 +103,7 @@ export default function InvoicePage() {
 
       // Make the logout request to the backend
       // const response = await axios.get(
-      //   "http://127.0.0.1:5001/common/logoutUser",
+      //   `${API_BASE_URL}/common/logoutUser`,
       //   {
       //     headers: {
       //       Authorization: `Bearer ${accessToken}`, // Send token in the header

@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -45,7 +46,7 @@ export default function TaskManager() {
 
     try {
       const response = await axios.get(
-        "http://127.0.0.1:5001/user/canAddTasks",
+        `${API_BASE_URL}/user/canAddTasks`,
         config
       );
 
@@ -107,7 +108,7 @@ export default function TaskManager() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5001/user/assignDailyTask",
+        `${API_BASE_URL}/user/assignDailyTask`,
         formData,
         config
       );
@@ -180,7 +181,7 @@ export default function TaskManager() {
 
     try {
       await axios.post(
-        "http://127.0.0.1:5001/user/markTaskAsCompleted",
+        `${API_BASE_URL}/user/markTaskAsCompleted`,
         payload,
         config
       );
