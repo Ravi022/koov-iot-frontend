@@ -137,6 +137,8 @@ export default function StockReportPage() {
     }
 
     useEffect(() => {
+        if (isLoading) return;
+
         if (dateFilter) {
             const givenFilteredDate = new Date(dateFilter)
             const filterActualData = actualData.filter((data) => {
@@ -159,7 +161,6 @@ export default function StockReportPage() {
         // Apply attribute dropdown filters
         codes = codes.filter((c) => {
             const parsed = parseMaterialCode(c);
-            if (isLoading) return <Loading text="Loading Report..." />;
 
             return (
                 (!milFilter || parsed.mil === milFilter) &&
@@ -171,7 +172,7 @@ export default function StockReportPage() {
         });
 
         setFilteredCodes(codes);
-    }, [materialCode, aggregatedData, dateFilter, searchCode, milFilter, sizeFilter, textureFilter, colorFilter, gradeFilter]);
+    }, [materialCode, aggregatedData, dateFilter, searchCode, milFilter, sizeFilter, textureFilter, colorFilter, gradeFilter, isLoading, actualData]);
 
 
 
