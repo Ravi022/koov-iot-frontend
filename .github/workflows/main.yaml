@@ -1,0 +1,164 @@
+name: ci/cd deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: frontend-production
+  cancel-in-progress: true
+
+env:
+  SERVER_DEPLOY_PATH: /home/vms/kooviot/koov-iot-frontend-gha
+  PM2_APP_NAME: koov-iot-frontend-gha
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: run tests when configured
+        run: |
+          script=$(jq -r '.scripts.test // empty' package.json)
+          placeholder='echo "Error: no test specified" && exit 1'
+
+          if [ -z "$script" ] || [ "$script" = "$placeholder" ]; then
+            echo "No test script configured. Skipping tests."
+            exit 0
+          fi
+
+          npm test
+
+      - name: Build the frontend
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+        run: npm run build
+
+      - name: Verify build
+        run: |
+          if [ ! -f .next/BUILD_ID ]; then
+            echo "ERROR: .next/BUILD_ID was not generated."
+            echo "Contents of .next/:"
+            ls -la .next/ 2>/dev/null || true
+            exit 1
+          fi
+
+          echo "Build verified successfully."
+          ls -la .next/
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+
+          chmod 600 ~/.ssh/deploy_key
+
+          PORT="${{ secrets.SSH_PORT }}"
+          if [ -z "$PORT" ]; then
+            PORT=22
+          fi
+
+          ssh-keyscan -p "$PORT" "${{ secrets.SSH_HOST }}" \
+            >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Upload to server
+        env:
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          PORT="${SSH_PORT:-22}"
+
+          RSYNC_SSH="ssh -i ~/.ssh/deploy_key -p ${PORT} -o StrictHostKeyChecking=accept-new"
+
+          TARGET="${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.SERVER_DEPLOY_PATH }}"
+
+          echo "Uploading application files..."
+
+          rsync -avz \
+            -e "$RSYNC_SSH" \
+            package.json \
+            package-lock.json \
+            next.config.mjs \
+            ecosystem.config.cjs \
+            "$TARGET/"
+
+          echo "Uploading build..."
+
+          rsync -avz --delete \
+            -e "$RSYNC_SSH" \
+            .next/ \
+            "$TARGET/.next/"
+
+      - name: Install dependencies and restart PM2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+
+          script: |
+            set -e
+
+            cd "${{ env.SERVER_DEPLOY_PATH }}"
+
+            echo "Checking deployed build..."
+
+            if [ ! -f .next/BUILD_ID ]; then
+              echo "ERROR: .next/BUILD_ID missing after deployment."
+
+              echo "Application directory:"
+              ls -la
+
+              echo ".next directory:"
+              ls -la .next/ 2>/dev/null || echo ".next/ folder not found"
+
+              exit 1
+            fi
+
+            echo "Build verified."
+
+            echo "Installing production dependencies..."
+
+            npm ci --omit=dev
+
+            echo "Replacing PM2 process from ecosystem.config.cjs..."
+
+            pm2 delete "${{ env.PM2_APP_NAME }}" || true
+
+            pm2 start ecosystem.config.cjs --only "${{ env.PM2_APP_NAME }}" --update-env
+
+            sleep 5
+
+            if ! pm2 describe "${{ env.PM2_APP_NAME }}" | grep -q "online"; then
+              echo "ERROR: PM2 application is not online."
+              pm2 status
+              pm2 logs "${{ env.PM2_APP_NAME }}" --lines 100 --nostream
+              exit 1
+            fi
+
+            echo "PM2 application is online."
+
+            echo "Saving PM2 process list..."
+
+            pm2 save
+
+            echo "Deployment completed successfully."
+
+            echo "PM2 status:"
+            pm2 status
