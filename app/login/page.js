@@ -68,36 +68,9 @@ export default function LoginPage() {
       console.error("Login failed:", err);
       setError("Login failed. Please check your credentials and try again.");
     } finally {
-      // loading = false;
-      // console.log(loading)
       setTimeout(() => setLoading(false), 1000);
-      // setLoading(false); // End loading
     }
   };
-
-  // if (loading) {
-  //   return <>
-  //     <div className="flex items-center justify-center h-screen  dark:from-gray-800 dark:via-gray-700 dark:to-gray-900">
-  //       <div className="text-center p-8 bg-white dark:bg-gray-800 shadow-2xl rounded-lg">
-  //         {/* Animated Text */}
-  //         <div className="text-2xl font-semibold text-gray-800 dark:text-white mb-6 animate-pulse">
-  //           Loading...
-  //         </div>
-
-  //         {/* Animated Spinner */}
-  //         <div className="relative flex justify-center items-center mb-6">
-  //           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white dark:border-gray-500"></div>
-  //           <div className="absolute text-xl font-bold text-blue-500 dark:text-gray-300">⏳</div>
-  //         </div>
-
-  //         {/* Redirecting Text */}
-  //         <p className="text-gray-600 dark:text-gray-400 animate-fade-in">
-  //           Redirecting you back to the homepage...
-  //         </p>
-  //       </div>
-  //     </div>
-  //   </>
-  // }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900 text-gray-100">

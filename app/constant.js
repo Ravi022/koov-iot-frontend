@@ -176,15 +176,15 @@ export const materialCodeForProduction = [
     "GLOVES3AFTBU01",
     "GLOVES3BFTBU01",
     "GLOVES3CFTBU01",
-    "GLOVE3CFTBU01",
+    // "GLOVE3CFTBU01",
     "GLOVES3DFTBU01",
-    "GLOVE3DFTBU01",
+    // "GLOVE3DFTBU01",
     "GLOVES3EFTBU01",
     "GLOVES3AFTCB01",
     "GLOVES3BFTCB01",
     "GLOVES3CFTCB01",
     "GLOVE3DFTCB01",
-    "GLOVES3EFTCB01", ,
+    "GLOVES3EFTCB01",
     "GLOVES3AFTVB01",
     "GLOVES3BFTVB01",
     "GLOVES3CFTVB01",
@@ -205,7 +205,7 @@ export const materialCodeForProduction = [
     "GLOVES4BFTBU01",
     "GLOVES4CFTBU01",
     "GLOVE4DFTBU01",
-    "GLOVES4DFTBU01",
+    // "GLOVES4DFTBU01",
     "GLOVES4EFTBU01",
     "GLOVES4AFTVB01",
     "GLOVES4BFTVB01",
@@ -216,7 +216,7 @@ export const materialCodeForProduction = [
     "GLOVES4DFUBL01",
     "GLOVES4DDTBL01",
     "GLOVES4DDTBU01",
-    "NMG4DFTBL01",
+    // "NMG4DFTBL01",
     "GLOVES5BFTBL01",
     "GLOVES5CFTBL01",
     "GLOVES5DFTBL01",
@@ -315,8 +315,6 @@ export const parseMaterialCode = (code) => {
     };
 };
 
-
-
 export const gradeOptions = ["A", "B", "Non moving"];
 
 // export const packingTypeOptions = [
@@ -339,8 +337,6 @@ export const getNormalizedDate = (date) => {
     const day = dateObj.getDate().toString().padStart(2, "0");
     return { year, month, day };
 };
-
-
 
 export const isValidBatchId = (batchId) => {
     const regex = /^\d{2}[a-l](0[1-9]|[12][0-9]|3[01])[dn]$/;
@@ -366,9 +362,6 @@ export const isValidBatchId = (batchId) => {
 // getListofBatchId();
 
 // export const batchIdOptions = await getBatchIdOptions();
-
-
-
 
 // console.log("batchIdOptions", batchIdOptions);
 

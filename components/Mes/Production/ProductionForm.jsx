@@ -62,7 +62,7 @@ function NumInput({ value, onChange, placeholder }) {
 
 // ─── Shared select style (mirrors InputField label + gray-200 bg) ────────────
 const selectCls = "w-full h-9 bg-gray-200 rounded px-2 text-sm";
-const labelCls  = "block text-sm font-medium mb-1";
+const labelCls = "block text-sm font-medium mb-1";
 
 export default function ProductionForm({
   materialCode,
@@ -78,15 +78,16 @@ export default function ProductionForm({
   productionItems,
   setProductionItems,
 }) {
-  const [mil,     setMil]     = useState("");
-  const [color,   setColor]   = useState("");
+
+  const [mil, setMil] = useState("");
+  const [color, setColor] = useState("");
   const [texture, setTexture] = useState("FT");
 
   // Find the real material code — handles both GLOVES and GLOVE prefixes
   const findCode = (m, size, t, c) => {
-    const withS    = `GLOVES${m}${size}${t}${c}01`;
+    const withS = `GLOVES${m}${size}${t}${c}01`;
     const withoutS = `GLOVE${m}${size}${t}${c}01`;
-    if (materialCodeForProduction.includes(withS))    return withS;
+    if (materialCodeForProduction.includes(withS)) return withS;
     if (materialCodeForProduction.includes(withoutS)) return withoutS;
     return withS; // fallback — show the code even if not in list yet
   };
@@ -104,13 +105,13 @@ export default function ProductionForm({
     setTotalProductionInKg("0.00");
   };
 
-  const handleMilChange     = (e) => { const v = e.target.value; setMil(v);     if (v && color && texture) generateTable(v, color, texture); };
-  const handleColorChange   = (e) => { const v = e.target.value; setColor(v);   if (mil && v && texture)   generateTable(mil, v, texture);   };
-  const handleTextureChange = (e) => { const v = e.target.value; setTexture(v); if (mil && color && v)     generateTable(mil, color, v);     };
+  const handleMilChange = (e) => { const v = e.target.value; setMil(v); if (v && color && texture) generateTable(v, color, texture); };
+  const handleColorChange = (e) => { const v = e.target.value; setColor(v); if (mil && v && texture) generateTable(mil, v, texture); };
+  const handleTextureChange = (e) => { const v = e.target.value; setTexture(v); if (mil && color && v) generateTable(mil, color, v); };
 
   const recalcTotals = (updated) => {
-    const totalPcs = updated.reduce((s, i) => s + (Number(i.pieces)          || 0), 0);
-    const totalKg  = updated.reduce((s, i) => s + (Number(i.productionInKg) || 0), 0);
+    const totalPcs = updated.reduce((s, i) => s + (Number(i.pieces) || 0), 0);
+    const totalKg = updated.reduce((s, i) => s + (Number(i.productionInKg) || 0), 0);
     setTotalPieces(totalPcs.toString());
     setTotalProductionInKg(totalKg.toFixed(2).toString());
   };

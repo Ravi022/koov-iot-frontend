@@ -16,8 +16,10 @@ import {
   Menu,
   X,
   ClipboardList,
+  BarChart3,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -34,16 +36,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import companyLogo from "../../assets/companyLogo2.png";
 
 // ─── Nav link used on desktop ─────────────────────────────────────────────────
-function NavLink({ icon: Icon, label, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className="group flex items-center gap-1.5 px-3 py-2 rounded-lg text-gray-900 font-semibold text-[0.95rem] hover:text-blue-700 hover:bg-blue-50 transition-all duration-200 relative"
-    >
+function NavLink({ icon: Icon, label, href, onClick }) {
+  const content = (
+    <div className="group flex items-center gap-1.5 px-3 py-2 rounded-lg text-gray-900 font-semibold text-[0.95rem] hover:text-blue-700 hover:bg-blue-50 transition-all duration-200 relative cursor-pointer">
       {Icon && <Icon className="w-4 h-4 text-gray-700 group-hover:text-blue-600 transition-colors duration-200" />}
       {label}
       {/* animated underline */}
       <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-0 bg-blue-600 rounded-full group-hover:w-4/5 transition-all duration-300" />
+    </div>
+  );
+
+  if (href) {
+    return <Link href={href} onClick={onClick}>{content}</Link>;
+  }
+
+  return (
+    <button onClick={onClick} className="outline-none">
+      {content}
     </button>
   );
 }
@@ -180,7 +189,7 @@ export default function Header() {
           {/* ── Desktop Nav ── */}
           <nav className="hidden md:flex items-center gap-1">
             <NavLink icon={Home} label="Home" onClick={handleRouter} />
-            <NavLink icon={Briefcase} label="Order" onClick={() => router.push("/OrderDetails")} />
+            <NavLink icon={Briefcase} label="Order" href="/OrderDetails" />
 
             {/* Reports: salesperson sees only Stock link, others get full dropdown */}
             {isSalesperson ? (
@@ -196,13 +205,23 @@ export default function Header() {
                       <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-0 bg-blue-600 rounded-full group-hover:w-4/5 transition-all duration-300" />
                     </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-52 shadow-xl border border-gray-100 rounded-xl p-1" align="center" sideOffset={8}>
+                  <DropdownMenuContent className="w-56 shadow-xl border border-gray-100 rounded-xl p-1" align="center" sideOffset={8}>
                     <DropdownMenuItem
                       className="rounded-lg cursor-pointer text-sm font-medium"
                       onClick={() => handleReportNavigation("production")}
                     >
-                      Production
+                      Production Report
                     </DropdownMenuItem>
+
+                    {/* {isAdmin && (
+                      <DropdownMenuItem
+                        className="rounded-lg cursor-pointer text-sm font-semibold text-blue-600 flex items-center gap-1.5"
+                        onClick={() => { setDrawerOpen(false); router.push("/admin/production-analytics"); }}
+                      >
+                        <BarChart3 className="w-4 h-4" /> Production Analytics
+                      </DropdownMenuItem>
+                    )} */}
+
                     <DropdownMenuItem
                       className="rounded-lg cursor-pointer text-sm font-medium"
                       onClick={() => handleReportNavigation("breakdown")}
@@ -240,11 +259,11 @@ export default function Header() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <NavLink icon={ClipboardList} label="Purchase Order" onClick={() => router.push("/purchaseOrder")} />
+                <NavLink icon={ClipboardList} label="Purchase Order" href="/purchaseOrder" />
               </>
             )}
 
-            <NavLink icon={AlertCircle} label="Issues" onClick={() => router.push("/IssueTracker")} />
+            <NavLink icon={AlertCircle} label="Issues" href="/IssueTracker" />
           </nav>
 
           {/* ── Right side: theme + avatar + hamburger ── */}
@@ -400,8 +419,17 @@ export default function Header() {
                     onClick={() => handleReportNavigation("production")}
                     className="w-full text-left px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all"
                   >
-                    Production
+                    Production Report
                   </button>
+
+                  {isAdmin && (
+                    <button
+                      onClick={() => navigate("/admin/production-analytics")}
+                      className="w-full text-left px-4 py-2 text-sm text-blue-600 font-semibold hover:bg-blue-50 rounded-lg transition-all"
+                    >
+                      Production Analytics
+                    </button>
+                  )}
 
                   {/* Packing sub-group */}
                   <p className="px-4 pt-1 text-[0.7rem] font-semibold text-gray-400 uppercase tracking-widest">Packing</p>
