@@ -69,6 +69,8 @@ const COLOR_MAP_PALETTE = {
   Blue: "#2563eb",
   "Cobalt Blue": "#1d4ed8",
   "Violet Blue": "#4f46e5",
+  "Lite Blue": "#2967ebff",
+  "Romson Blue": "#554de3ff",
   Orange: "#f97316",
   White: "#94a3b8",
   Unknown: "#64748b",
@@ -570,6 +572,7 @@ export default function ProductionAnalyticsDashboard() {
               </div>
 
               {/* 4B: Color-wise vs Date */}
+
               <div className="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
                 <div className="flex items-center justify-between mb-4">
                   <h4 className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
@@ -603,6 +606,7 @@ export default function ProductionAnalyticsDashboard() {
               </div>
 
               {/* 4C: Size-wise vs Date */}
+
               <div className="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
                 <div className="flex items-center justify-between mb-4">
                   <h4 className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">

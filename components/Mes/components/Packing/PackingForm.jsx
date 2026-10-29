@@ -15,6 +15,7 @@ import CodeInput from "../../CodeInput/CodeInput"
 export default function PackingForm() {
     const [items, setItems] = useState([])
     const [date, setDate] = useState("")
+    const [packingArea, setPackingArea] = useState("RML-3")
     const [materialCode, setMaterialCode] = useState("")
     const [grade, setGrade] = useState("")
     const [pieces, setPieces] = useState();
@@ -154,7 +155,8 @@ export default function PackingForm() {
                 day,
                 mtdType: "packing",
                 items,
-                totalPacking
+                totalPacking,
+                packingArea
             },
                 {
                     headers: {
@@ -204,8 +206,22 @@ export default function PackingForm() {
         <div className="p-4 md:p-0">
             <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-3 border-b border-green-100">
                 <h2 className="text-2xl font-bold text-green-700">FG Entry</h2>
+                <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-center gap-2">
+                        <label className="text-xs font-semibold uppercase tracking-wider text-gray-600 whitespace-nowrap">
+                            Packing Area:
+                        </label>
+                        <select
+                            value={packingArea}
+                            onChange={(e) => setPackingArea(e.target.value)}
+                            className="h-9 px-3 bg-gray-200 hover:bg-gray-100 focus:bg-white rounded border border-gray-300 text-sm font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 transition cursor-pointer"
+                        >
+                            <option value="RML-3">RML-3</option>
+                            <option value="RML-6">RML-6</option>
+                        </select>
+                    </div>
                 <InputField
                     label=""
                     type="date"
@@ -213,6 +229,7 @@ export default function PackingForm() {
                     onChange={setDate}
                     error={errors.date}
                 />
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">

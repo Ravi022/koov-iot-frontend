@@ -33,17 +33,6 @@ export default function RejectionReportForm() {
     return { year, month, day };
   };
 
-  // useEffect(() => {
-  //    if(packingRejection && lineRejection){
-  //      console.log("scarp calculation");
-  //      let totalScrap = totalRejection * 3.1;
-  //      let scrapInMT = totalScrap/1000000;
-  //      setScrap(scrapInMT);
-  //    }
-  //    else{
-  //      setScrap('')
-  //    }
-  // },[packingRejection, lineRejection])
 
   const handleSubmit = async (e) => {
     e.preventDefault();

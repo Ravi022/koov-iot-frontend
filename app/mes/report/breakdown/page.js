@@ -8,6 +8,7 @@ import FilterBar from '@/components/Mes/components/Packing/FilterBar';
 import Pagination from '@/components/ui/pagination';
 import ReportLayout from '@/components/ui/ReportLayout';
 import StatCard from '@/components/ui/StatCard';
+import DowntimeDashboard from '@/components/Mes/components/DowntimeDashboard';
 
 const BreakdownReport = () => {
     const [data, setData] = useState([]);
@@ -191,6 +192,7 @@ const BreakdownReport = () => {
     // Renders one row per breakdown item; merges Date/Line/Shift via rowSpan when breakdownItems exist
     const tableContent = (
         <>
+            <DowntimeDashboard dateFilter={dateFilter} startDate={startDate} endDate={endDate} />
             {/* Desktop table */}
             <table className="min-w-full text-sm text-left text-gray-700 border-collapse hidden md:table">
                 <thead className="bg-orange-100 text-xs uppercase text-orange-900 sticky top-0 z-10">

@@ -82,6 +82,9 @@ const ProtectedRoute = ({ children }) => {
             router.push('/purchaseOrder');
             return;
           }
+          else if(pathname.startsWith('/admin')){
+            return;
+          }
           router.push('/admin');
         }
         else {

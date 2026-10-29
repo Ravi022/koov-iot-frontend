@@ -90,6 +90,7 @@ const WipBgradeTable = () => {
         const flatData = filteredData.flatMap(record =>
             record.items.map((item, itemIndex) => ({
                 Date: itemIndex === 0 ? new Date(record.date).toLocaleDateString() : "",
+                PackingArea: itemIndex === 0 ? (record.packingArea || "RML-3") : "",
                 // BatchID: item.batchId,
                 MaterialCode: item.materialCode,
                 Pieces: item.pieces,
@@ -144,6 +145,7 @@ const WipBgradeTable = () => {
             <thead className="bg-purple-100 text-xs uppercase text-purple-900 sticky top-0 z-10">
                 <tr>
                     <th className="px-6 py-3 border-b font-semibold" rowSpan="2">Date</th>
+                    <th className="px-6 py-3 border-b font-semibold" rowSpan="2">Packing Area</th>
                     <th className="px-6 py-3 border-b font-semibold text-center" colSpan="2">Items</th>
                     <th className="px-6 py-3 border-b font-semibold text-right" rowSpan="2">Total WIP B Grade</th>
                 </tr>
@@ -169,6 +171,13 @@ const WipBgradeTable = () => {
                             >
                                 <td className="px-6 py-4 whitespace-nowrap align-top font-medium text-gray-900">
                                     {index === 0 ? formatToDDMMYYYY(record.date) : ''}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap align-top font-medium text-gray-700">
+                                    {index === 0 ? (
+                                        <span className="px-2.5 py-1 bg-purple-50 border border-purple-200 text-purple-800 rounded text-xs font-semibold">
+                                            {record.packingArea || 'RML-3'}
+                                        </span>
+                                    ) : ''}
                                 </td>
                                 {/* <td className="px-4 py-2">{item.batchId}</td> */}
                                 <td className="px-6 py-4 align-top">{item.materialCode}</td>

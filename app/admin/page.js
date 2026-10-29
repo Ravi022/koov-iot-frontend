@@ -1,6 +1,5 @@
 "use client";
 import { API_BASE_URL } from "@/lib/api";
-
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -12,6 +11,7 @@ import {
   BarChart3,
   Download,
   ExternalLink,
+  Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -169,12 +169,20 @@ export default function AdminDashboard() {
               variant={activeTab === "production-analytics" ? "default" : "ghost"}
               onClick={() => setActiveTab("production-analytics")}
               className={`text-sm font-semibold rounded-full px-5 ${activeTab === "production-analytics"
-                  ? "bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20"
-                  : "hover:bg-blue-50 text-blue-600 dark:hover:bg-blue-950/50"
+                ? "bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20"
+                : "hover:bg-blue-50 text-blue-600 dark:hover:bg-blue-950/50"
                 }`}
             >
               <BarChart3 className="w-4 h-4 mr-2" />
               Analytics
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/admin/downtime-analytics")}
+              className="text-sm font-semibold rounded-full px-5 hover:bg-red-50 text-red-600 dark:hover:bg-red-950/50 border border-red-200 dark:border-red-900"
+            >
+              <Activity className="w-4 h-4 mr-2" />
+              Downtime Analytics
             </Button>
           </div>
 

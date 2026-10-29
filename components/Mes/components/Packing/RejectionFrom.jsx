@@ -14,6 +14,7 @@ const ALL_REASONS = ["Touching, pin hole, touching, cluster, tear and torn", "Te
 export default function RejectionForm() {
     const [items, setItems] = useState([])
     const [date, setDate] = useState("")
+    const [packingArea, setPackingArea] = useState("RML-3")
     const [materialCode, setMaterialCode] = useState("")
     const [pieces, setPieces] = useState()
     const [reason, setReason] = useState("")
@@ -124,7 +125,8 @@ export default function RejectionForm() {
                 day,
                 // mtdType: "packing",
                 items,
-                totalPackingRej: Number(totalPieces)
+                totalPackingRej: Number(totalPieces),
+                packingArea
             },
                 {
                     headers: {
@@ -181,9 +183,24 @@ export default function RejectionForm() {
 
     return (
         <div>
-            <div className="flex justify-between p-4">
-                <h2 className="text-xl font-semibold text-purple-700 mb-4">WIP Rejection Entry</h2>
-                <InputField label="" type="date" value={date} onChange={setDate} error={errors.date} />
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 border-b border-purple-100 mb-4">
+                <h2 className="text-xl font-semibold text-purple-700">WIP Rejection Entry</h2>
+                <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-center gap-2">
+                        <label className="text-xs font-semibold uppercase tracking-wider text-gray-600 whitespace-nowrap">
+                            Packing Area:
+                        </label>
+                        <select
+                            value={packingArea}
+                            onChange={(e) => setPackingArea(e.target.value)}
+                            className="h-9 px-3 bg-gray-200 hover:bg-gray-100 focus:bg-white rounded border border-gray-300 text-sm font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 transition cursor-pointer"
+                        >
+                            <option value="RML-3">RML-3</option>
+                            <option value="RML-6">RML-6</option>
+                        </select>
+                    </div>
+                    <InputField label="" type="date" value={date} onChange={setDate} error={errors.date} />
+                </div>
             </div>
             <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-4">
                 {/* <InputField label="Batch ID:" value={batchId} onChange={setBatchId} error={errors.batchId} readOnly={false} /> */}

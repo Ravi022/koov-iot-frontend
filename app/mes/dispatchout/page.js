@@ -24,6 +24,7 @@ import * as XLSX from "xlsx"
 
 export default function DispatchPage() {
   const [date, setDate] = useState("")
+  const [dispatchLocation, setDispatchLocation] = useState("RML-3")
   const [invoiceNo, setInvoiceNo] = useState("")
   // const [batchId, setBatchId] = useState("")
   const [materialCode, setMaterialCode] = useState("")
@@ -37,7 +38,7 @@ export default function DispatchPage() {
   const [rate, setRate] = useState("")
   const [invoiceAmount, setInvoiceAmount] = useState("")
   const [taxableValueForGST, setTaxableValueForGST] = useState("")
-  const [shipToParty, setShipToParty] = useState("")
+  const [billToParty, setbillToParty] = useState("")
 
   const [items, setItems] = useState([])
   const [errors, setErrors] = useState({});
@@ -58,7 +59,7 @@ export default function DispatchPage() {
     setRate("")
     setInvoiceAmount("")
     setTaxableValueForGST("")
-    setShipToParty("")
+    setbillToParty("")
     setInvoiceNo("")
     setErrors({})
   }
@@ -84,7 +85,7 @@ export default function DispatchPage() {
 
     if (editingId) {
       const updatedItems = items.map(item => item.id === editingId ? {
-        ...item, materialCode, grade, packagingType, pieces: parseInt(pieces), customer, invoiceNo, salesOrderNo, rate: Number(rate), invoiceAmount: Number(invoiceAmount), taxableValueForGST: Number(taxableValueForGST), shipToParty
+        ...item, materialCode, grade, packagingType, pieces: parseInt(pieces), customer, invoiceNo, salesOrderNo, rate: Number(rate), invoiceAmount: Number(invoiceAmount), taxableValueForGST: Number(taxableValueForGST), billToParty
       } : item);
       setItems(updatedItems);
       setEditingId(null);
@@ -101,7 +102,7 @@ export default function DispatchPage() {
         rate: Number(rate),
         invoiceAmount: Number(invoiceAmount),
         taxableValueForGST: Number(taxableValueForGST),
-        shipToParty
+        billToParty
       }
       setItems([...items, newItem])
     }
@@ -125,7 +126,7 @@ export default function DispatchPage() {
       setRate(itemToEdit.rate || "");
       setInvoiceAmount(itemToEdit.invoiceAmount || "");
       setTaxableValueForGST(itemToEdit.taxableValueForGST || "");
-      setShipToParty(itemToEdit.shipToParty || "");
+      setbillToParty(itemToEdit.billToParty || "");
       setEditingId(id);
     }
   }
@@ -151,7 +152,16 @@ export default function DispatchPage() {
 
     const { year, month, day } = getNormalizedDate(date);
     try {
-      const response = await axios.post(`${API_BASE_URL}/production/dispachOutMes/update`, { year, month, day, items, totalPieces, mtdType: "totaldispatch", invoiceNo },
+      const response = await axios.post(`${API_BASE_URL}/production/dispachOutMes/update`, {
+        year,
+        month,
+        day,
+        items,
+        totalPieces,
+        mtdType: "totaldispatch",
+        invoiceNo,
+        dispatchLocation: dispatchLocation || "RML-3"
+      },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -159,19 +169,23 @@ export default function DispatchPage() {
         }
       )
 
+
+
+
       if (response.status === 200) {
         // alert("Dispatch submitted successfully!")
         toast.success("Dispatch submitted successfully!")
         setItems([])
         setDate("")
+        setDispatchLocation("RML-3")
         resetFields()
       } else {
         toast.error("Failed to submit.")
       }
     } catch (err) {
       console.log(err);
-      console.error(err.response.data.message);
-      toast.error(err.response.data.message);
+      console.error(err.response?.data?.message || err.message);
+      toast.error(err.response?.data?.message || "Failed to submit.");
     }
     finally {
       setIsloading(false);
@@ -229,12 +243,13 @@ export default function DispatchPage() {
 
         const dateStr = row["Invoice Date"] || row["Date"] || "";
 
-        let shipParty = row["Ship to Party Place"] || row["Ship To Party"] || "";
+        let shipParty = row["Billed to Party Region"] || row["Billed to Party"] || "";
 
         // Scan upwards if empty
+
         if (!shipParty) {
           for (let i = index - 1; i >= 0; i--) {
-            const upperVal = data[i]["Ship to Party Place"] || data[i]["Ship To Party"];
+            const upperVal = data[i]["Billed to Party Region"] || data[i]["Billed to Party"];
             if (upperVal) {
               shipParty = upperVal;
               break;
@@ -256,7 +271,7 @@ export default function DispatchPage() {
           rate: (Number(row["Rate"]) || 0),
           invoiceAmount: (Number(row["Invoice Amount in INR"] || row["Invoice Amount"]) || 0),
           taxableValueForGST: (Number(row["Taxable value for GST"] || row["Taxable Value for GST"]) || 0),
-          shipToParty: shipParty,
+          billToParty: shipParty,
           dateStr: dateStr // temp field to filter by top date
         };
       });
@@ -277,12 +292,11 @@ export default function DispatchPage() {
 
 
 
-
-
         // Group by matching fields to aggregate amounts and pieces
+
         const itemMap = new Map();
         uploadedItems.forEach(item => {
-          const key = `${item.invoiceNo}|${item.materialCode}|${item.packagingType}|${item.salesOrderNo}|${item.customer}|${item.rate}|${item.shipToParty}`;
+          const key = `${item.invoiceNo}|${item.materialCode}|${item.packagingType}|${item.salesOrderNo}|${item.customer}|${item.rate}|${item.billToParty}`;
           if (itemMap.has(key)) {
             const existingItem = itemMap.get(key);
             existingItem.pieces += item.pieces || 0;
@@ -292,6 +306,7 @@ export default function DispatchPage() {
             itemMap.set(key, { ...item });
           }
         });
+
         uploadedItems = Array.from(itemMap.values());
 
 
@@ -319,6 +334,18 @@ export default function DispatchPage() {
           const month = String(excelDate.getMonth() + 1).padStart(2, '0');
           const day = String(excelDate.getDate()).padStart(2, '0');
           setDate(`${year}-${month}-${day}`);
+        }
+
+        if (data.length > 0) {
+          const firstRow = data[0] || {};
+          const rowLocation = firstRow["Dispatch Location"] || firstRow["Location"] || firstRow["Packing Area"] || "";
+          if (rowLocation) {
+            if (rowLocation.toUpperCase().includes("RML-6") || rowLocation.toUpperCase().includes("RML 6")) {
+              setDispatchLocation("RML-6");
+            } else if (rowLocation.toUpperCase().includes("RML-3") || rowLocation.toUpperCase().includes("RML 3")) {
+              setDispatchLocation("RML-3");
+            }
+          }
         }
       }
 
@@ -352,8 +379,21 @@ export default function DispatchPage() {
         </h1>
 
         <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-6 mb-8 pb-8 border-b border-gray-100">
-          <div className="w-full md:w-1/3">
-            <InputField label="Date:" type="date" value={date} onChange={setDate} error={errors.date} />
+          <div className="w-full md:w-2/3 flex flex-col sm:flex-row gap-6">
+            <div className="w-full sm:w-1/2">
+              <InputField label="Date:" type="date" value={date} onChange={setDate} error={errors.date} />
+            </div>
+            <div className="w-full sm:w-1/2">
+              <label className="block text-sm font-medium mb-1 text-gray-700">Dispatch Location:</label>
+              <select
+                value={dispatchLocation}
+                onChange={(e) => setDispatchLocation(e.target.value)}
+                className="w-full h-9 bg-gray-200 hover:bg-gray-100 focus:bg-white rounded px-3 text-sm font-medium text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition cursor-pointer"
+              >
+                <option value="RML-3">RML-3</option>
+                <option value="RML-6">RML-6</option>
+              </select>
+            </div>
           </div>
           <div className="flex items-center">
             <label className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-md cursor-pointer transition-all duration-200 font-medium">
@@ -368,7 +408,7 @@ export default function DispatchPage() {
           <InputField label="Invoice No:" value={invoiceNo} onChange={setInvoiceNo} error={errors.invoiceNo} />
           <InputField label="Sales Order No:" value={salesOrderNo} onChange={setSalesOrderNo} />
           <InputField label="Customer:" value={customer} onChange={setCustomer} error={errors.customer} />
-          <InputField label="Ship To Party:" value={shipToParty} onChange={setShipToParty} />
+          <InputField label="Billed to Party:" value={billToParty} onChange={setbillToParty} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -422,7 +462,7 @@ export default function DispatchPage() {
                     <th className="text-right py-4 px-4">Pieces</th>
                     <th className="text-left py-4 px-4">Customer</th>
                     <th className="text-right py-4 px-4">Amount</th>
-                    <th className="text-right py-4 px-4">Ship to party</th>
+                    <th className="text-right py-4 px-4">Billed to Party</th>
                     <th className="text-center py-4 px-4">Actions</th>
                   </tr>
                 </thead>
@@ -440,7 +480,7 @@ export default function DispatchPage() {
                       <td className="py-3 px-4 text-sm font-semibold text-gray-900 text-right">{item.pieces.toLocaleString('en-IN')}</td>
                       <td className="py-3 px-4 text-sm text-gray-600 truncate max-w-[12rem]" title={item.customer}>{item.customer}</td>
                       <td className="py-3 px-4 text-sm font-medium text-gray-900 text-right">{item.invoiceAmount ? `₹${item.invoiceAmount.toLocaleString('en-IN')}` : '-'}</td>
-                      <td className="py-3 px-4 text-sm text-gray-600 truncate max-w-[12rem]" title={item.shipToParty}>{item.shipToParty}</td>
+                      <td className="py-3 px-4 text-sm text-gray-600 truncate max-w-[12rem]" title={item.billToParty}>{item.billToParty}</td>
                       <td className="py-3 px-4">
                         <div className="flex items-center justify-center gap-2">
                           <Button size="sm" variant="outline" className="text-indigo-600 border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700" onClick={() => handleEdit(item.id)}>

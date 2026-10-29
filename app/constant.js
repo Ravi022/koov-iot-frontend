@@ -42,6 +42,35 @@ export const materialCodeOptions = [...new Set([
     "GLOVES3DFTCB02",
     "GLOVES3EFTCB01",
     "GLOVES3EFTCB02",
+
+
+    "GLOVES3AFTLB01",
+    "GLOVES3AFTLB02",
+    "GLOVES3BFTLB01",
+    "GLOVES3BFTLB02",
+    "GLOVES3CFTLB01",
+    "GLOVES3CFTLB02",
+    "GLOVES3DFTLB01",
+    "GLOVES3DFTLB02",
+    "GLOVES3EFTLB01",
+    "GLOVES3EFTLB02",
+
+
+
+
+    "GLOVES3AFTRB01",
+    "GLOVES3AFTRB02",
+    "GLOVES3BFTRB01",
+    "GLOVES3BFTRB02",
+    "GLOVES3CFTRB01",
+    "GLOVES3CFTRB02",
+    "GLOVES3DFTRB01",
+    "GLOVES3DFTRB02",
+    "GLOVES3EFTRB01",
+    "GLOVES3EFTRB02",
+
+
+
     "GLOVES3BFUCB01",
     "GLOVES3BFUCB02",
     "GLOVES3DFUCB02",
@@ -185,6 +214,22 @@ export const materialCodeForProduction = [
     "GLOVES3CFTCB01",
     "GLOVE3DFTCB01",
     "GLOVES3EFTCB01",
+
+
+
+    "GLOVES3AFTLB01",
+    "GLOVES3BFTLB01",
+    "GLOVES3CFTLB01",
+    "GLOVES3DFTLB01",
+    "GLOVES3EFTLB01",
+    "GLOVES3AFTRB01",
+    "GLOVES3BFTRB01",
+    "GLOVES3CFTRB01",
+    "GLOVES3DFTRB01",
+    "GLOVES3EFTRB01",
+
+
+
     "GLOVES3AFTVB01",
     "GLOVES3BFTVB01",
     "GLOVES3CFTVB01",
@@ -295,6 +340,8 @@ export const colorMap = {
     VB: "Voilet Blue",
     OR: "Orange",
     WH: "White",
+    RB: "Romson Blue",
+    LB: "Lite Blue"
 };
 
 const gradeMap = {

@@ -88,6 +88,7 @@ const PackingTable = () => {
         const flattenedData = filteredData.flatMap((record, index) => {
             const items = record.items.map((item, itemIndex) => ({
                 Date: itemIndex === 0 ? new Date(record.date).toLocaleDateString() : "",
+                PackingArea: itemIndex === 0 ? (record.packingArea || "RML-3") : "",
                 // BatchID: item.batchId,
                 MaterialCode: item.materialCode,
                 Grade: item.grade,
@@ -475,11 +476,13 @@ const PackingTable = () => {
             <thead className="bg-green-100 text-xs uppercase text-green-900 sticky top-0 z-10">
                 <tr>
                     <th className="px-6 py-3 border-b font-semibold">Date</th>
+                    <th className="px-6 py-3 border-b font-semibold">Packing Area</th>
                     {/* <th className="px-6 py-3 border-b font-semibold">Batch ID</th> */}
                     <th className="px-6 py-3 border-b font-semibold text-center" colSpan="5">Items</th>
                     <th className="px-6 py-3 border-b font-semibold text-right">Total Packing</th>
                 </tr>
                 <tr className="bg-green-100 border-b">
+                    <th className="px-6 py-2 font-medium"></th>
                     <th className="px-6 py-2 font-medium"></th>
                     <th className="px-6 py-2 font-medium">Material Code</th>
                     <th className="px-6 py-2 font-medium">Grade</th>
@@ -492,7 +495,7 @@ const PackingTable = () => {
             <tbody className="divide-y divide-gray-200">
                 {currentItems.length === 0 ? (
                     <tr>
-                        <td colSpan={7} className="text-center py-12 text-gray-500 font-medium text-lg">
+                        <td colSpan={8} className="text-center py-12 text-gray-500 font-medium text-lg">
                             Result not found
                         </td>
                     </tr>
@@ -505,6 +508,13 @@ const PackingTable = () => {
                             >
                                 <td className="px-6 py-4 whitespace-nowrap align-top font-medium text-gray-900">
                                     {index === 0 ? formatToDDMMYYYY(record.date) : ''}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap align-top font-medium text-gray-700">
+                                    {index === 0 ? (
+                                        <span className="px-2.5 py-1 bg-green-50 border border-green-200 text-green-800 rounded text-xs font-semibold">
+                                            {record.packingArea || 'RML-3'}
+                                        </span>
+                                    ) : ''}
                                 </td>
                                 {/* <td className="px-6 py-4 align-top">{item.batchId}</td> */}
                                 <td className="px-6 py-4 align-top">{item.materialCode}</td>

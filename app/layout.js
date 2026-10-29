@@ -5,21 +5,41 @@ import ProtectedRouteAll from "@/components/ProtectedRouteAll/ProtectedRouteAll"
 // import { useRouter } from "next/router";
 import { Inter } from 'next/font/google';
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+
+// import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
+  display: "swap",
   weight: "100 900",
 });
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter', // Optional: if you want CSS variable support
-});
+export { inter, geistMono };
+
+// const geistSans = localFont({
+//   src: "./fonts/GeistVF.woff",
+//   variable: "--font-geist-sans",
+//   weight: "100 900",
+// });
+
+// const geistMono = localFont({
+//   src: "./fonts/GeistMonoVF.woff",
+//   variable: "--font-geist-mono",
+//   weight: "100 900",
+// });
+
+// const inter = Inter({
+//   subsets: ['latin'],
+//   variable: '--font-inter', // Optional: if you want CSS variable support
+// });
 
 export const metadata = {
   title: "Koove_IOT",
@@ -33,7 +53,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} font-sans antialiased `}>
+        className={` ${geistMono.variable} ${inter.variable} font-sans antialiased `}>
         <ProtectedRouteAll>
           {children}
         </ProtectedRouteAll>

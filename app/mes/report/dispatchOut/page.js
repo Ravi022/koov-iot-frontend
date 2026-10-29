@@ -21,6 +21,7 @@ const DispatchOutTable = () => {
     const [endDate, setEndDate] = useState('');
     const [enableFilter, setEnableFilter] = useState(false);
     const [materialCode, setMaterialCode] = useState('');
+    const [locationFilter, setLocationFilter] = useState('ALL');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
@@ -47,6 +48,9 @@ const DispatchOutTable = () => {
 
     useEffect(() => {
         let tempData = [...data];
+        if (locationFilter && locationFilter !== 'ALL') {
+            tempData = tempData.filter(record => (record.dispatchLocation || 'RML-3') === locationFilter);
+        }
         if (dateFilter) {
             tempData = tempData.filter(record =>
                 new Date(record.date).toLocaleDateString() === new Date(dateFilter).toLocaleDateString()
@@ -65,7 +69,7 @@ const DispatchOutTable = () => {
         }
         setFilteredData(tempData);
         setCurrentPage(1);
-    }, [dateFilter, startDate, endDate, enableFilter, materialCode, data]);
+    }, [dateFilter, startDate, endDate, enableFilter, materialCode, locationFilter, data]);
 
     const formatToDDMMYYYY = (dateString) => {
         const date = new Date(dateString);
@@ -74,20 +78,21 @@ const DispatchOutTable = () => {
 
     const exportToExcel = () => {
         const flatData = filteredData.flatMap(record =>
-            record.items.map(item => ({
-                Date: new Date(record.date).toLocaleDateString(),
-                InvoiceNo: item.invoiceNo || record.invoiceNo || '-',
-                SalesOrder: item.salesOrderNo || '-',
-                MaterialCode: item.materialCode,
-                Grade: item.grade,
-                PackagingType: item.packagingType,
-                Pieces: item.pieces,
-                Rate: item.rate || 0,
-                InvoiceAmount: item.invoiceAmount || 0,
-                TaxableValueGST: item.taxableValueForGST || 0,
-                Customer: item.customer,
-                ShipToParty: item.shipToParty || '-',
-                TotalPieces: record.totalPieces
+            record.items.map((item, index) => ({
+                "Date": new Date(record.date).toLocaleDateString(),
+                "Dispatch Location": record.dispatchLocation || 'RML-3',
+                "Invoice No": item.invoiceNo || record.invoiceNo || '-',
+                "Sales Order": item.salesOrderNo || '-',
+                "Material Code": item.materialCode,
+                "Grade": item.grade,
+                "Packaging Type": item.packagingType,
+                "Pieces": item.pieces,
+                "Rate": item.rate || 0,
+                "Invoice Amount": item.invoiceAmount || 0,
+                "Taxable Value GST": item.taxableValueForGST || 0,
+                "Customer": item.customer,
+                "Bill To Party": item.shipToParty || item.billToParty || '-',
+                "Total Pieces": index === 0 ? record.totalPieces : ''
             }))
         );
         const ws = XLSX.utils.json_to_sheet(flatData);
@@ -109,13 +114,35 @@ const DispatchOutTable = () => {
 
     // Stats for the report
     const stats = (
-        <StatCard
-            title="Total Dispatch"
-            value={totalDispatch.toLocaleString('en-IN')}
-            // icon={PackageCheck} 
-            className="border-l-blue-500"
-            iconClassName="bg-blue-100 text-blue-600"
-        />
+        <div className="flex items-center gap-4">
+            <div className="flex bg-gray-100 p-1 rounded-lg border border-gray-200">
+                <button
+                    onClick={() => setLocationFilter('ALL')}
+                    className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${locationFilter === 'ALL' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+                >
+                    All Locations
+                </button>
+                <button
+                    onClick={() => setLocationFilter('RML-3')}
+                    className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${locationFilter === 'RML-3' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+                >
+                    RML-3
+                </button>
+                <button
+                    onClick={() => setLocationFilter('RML-6')}
+                    className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${locationFilter === 'RML-6' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+                >
+                    RML-6
+                </button>
+            </div>
+            <StatCard
+                title="Total Dispatch"
+                value={totalDispatch.toLocaleString('en-IN')}
+                // icon={PackageCheck} 
+                className="border-l-blue-500"
+                iconClassName="bg-blue-100 text-blue-600"
+            />
+        </div>
     );
 
     const filterComponent = (
@@ -142,11 +169,13 @@ const DispatchOutTable = () => {
             <thead className="bg-blue-100 text-xs uppercase text-blue-900 sticky top-0 z-10">
                 <tr>
                     <th className="px-6 py-3 border-b font-semibold bg-indigo-50 text-indigo-900 rounded-tl-lg">Date</th>
+                    <th className="px-6 py-3 border-b font-semibold bg-indigo-50 text-indigo-900">Location</th>
                     <th className="px-6 py-3 border-b font-semibold bg-indigo-50 text-indigo-900">Invoice No</th>
-                    <th className="px-6 py-3 border-b font-semibold text-center bg-indigo-50 text-indigo-900" colSpan="8">Items</th>
+                    <th className="px-6 py-3 border-b font-semibold text-center bg-indigo-50 text-indigo-900" colSpan="9">Items</th>
                     <th className="px-6 py-3 border-b font-semibold text-right bg-indigo-50 text-indigo-900 rounded-tr-lg">Total Pieces</th>
                 </tr>
                 <tr className="bg-white border-b shadow-sm">
+                    <th className="px-4 py-2"></th>
                     <th className="px-4 py-2"></th>
                     <th className="px-4 py-2"></th>
                     <th className="px-4 py-2 font-medium text-gray-700">Sales Order</th>
@@ -157,14 +186,14 @@ const DispatchOutTable = () => {
                     <th className="px-4 py-2 font-medium text-gray-700 text-right">Rate</th>
                     <th className="px-4 py-2 font-medium text-gray-700 text-right">Amount</th>
                     <th className="px-4 py-2 font-medium text-gray-700">Customer</th>
-                    <th className="px-4 py-2 font-medium text-gray-700">Ship To Party</th>
+                    <th className="px-4 py-2 font-medium text-gray-700">Billed to Party</th>
                     <th className="px-4 py-2"></th>
                 </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
                 {currentItems.length === 0 ? (
                     <tr>
-                        <td colSpan={8} className="text-center py-12 text-gray-500 font-medium text-lg">
+                        <td colSpan={13} className="text-center py-12 text-gray-500 font-medium text-lg">
                             No records found
                         </td>
                     </tr>
@@ -174,6 +203,13 @@ const DispatchOutTable = () => {
                             <tr key={`${record._id}-${index}`} className="hover:bg-gray-50 transition-colors">
                                 <td className="px-6 py-4 whitespace-nowrap align-top font-medium text-gray-900">
                                     {index === 0 ? formatToDDMMYYYY(record.date) : ''}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap align-top font-medium text-gray-700">
+                                    {index === 0 ? (
+                                        <span className="px-2.5 py-1 bg-indigo-50 border border-indigo-200 text-indigo-800 rounded text-xs font-semibold">
+                                            {record.dispatchLocation || 'RML-3'}
+                                        </span>
+                                    ) : ''}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap align-top text-gray-600">
                                     {item.invoiceNo || (index === 0 ? record.invoiceNo : '')}
@@ -190,7 +226,7 @@ const DispatchOutTable = () => {
                                 <td className="px-4 py-4 align-top text-right text-gray-600 text-sm">{item.rate ? '₹' + item.rate : '-'}</td>
                                 <td className="px-4 py-4 align-top text-right text-gray-900 font-semibold text-sm">{item.invoiceAmount ? '₹' + item.invoiceAmount.toLocaleString('en-IN') : '-'}</td>
                                 <td className="px-4 py-4 align-top text-gray-700 truncate max-w-[12rem] text-sm" title={item.customer}>{item.customer}</td>
-                                <td className="px-4 py-4 align-top text-gray-600 truncate max-w-[10rem] text-sm" title={item.shipToParty}>{item.shipToParty || '-'}</td>
+                                <td className="px-4 py-4 align-top text-gray-600 truncate max-w-[10rem] text-sm" title={item.shipToParty || item.billToParty}>{item.shipToParty || item.billToParty || '-'}</td>
                                 <td className="px-6 py-4 align-top text-right font-bold text-gray-900">
                                     {index === 0 ? record.totalPieces.toLocaleString('en-IN') : ''}
                                 </td>
